@@ -1,3 +1,16 @@
+// NES.css variable import
+@import '../node_modules/nes.css/scss/base/color-palette';
+@import '../node_modules/nes.css/scss/base/variables';
+
+// Fix for import issue with their data URI conversion function
+$cursor-url: url('../../assets/cursor.png');
+$cursor-click-url: url('../../assets/cursor-click.png');
+
+// NES.css import
+@import '../node_modules/nes.css/scss/nes';
+
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
