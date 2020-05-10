@@ -1,34 +1,6 @@
 import React from 'react';
 import './Stats.scss';
-import noUiSlider from 'nouislider';
-import 'nouislider/distribute/nouislider.css';
-
-class StatBar extends React.Component {
-    componentDidMount() {
-        var slider = document.getElementById(this.props.id);
-
-        noUiSlider.create(slider, {
-            start: 0,
-            connect: false,
-            range: {
-                'min': 0,
-                'max': 100
-            }
-        });
-    }
-
-    render() {
-        return (
-            <div className="columns">
-                <div className="column is-full">
-                    <h5 className='title is-5 is-captitalized'>{this.props.title}</h5>
-                    <div id={this.props.id}></div>
-                </div>
-            </div>
-        )
-    }
-}
-
+import StatBar from './StatBar';
 
 class Stats extends React.Component {
     constructor(props) {
@@ -59,7 +31,7 @@ class Stats extends React.Component {
                     <p className="subtitle stats-date">Thu May 07, 2020</p>
                 </header>
                 <div className="card-content">
-                    <div className="content">
+                    <div className="container">
                         {statBars}
                     </div>
                 </div>
