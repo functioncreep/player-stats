@@ -1,0 +1,67 @@
+@import '../sass/variables';
+
+$bar-width: 15px;
+$bar-end-radius: $bar-width / 2;
+$bar-border-width: 2px;
+$bar-border: $bar-border-width solid #000000;
+$handle-size: $bar-width * 1.75;
+$handle-top: -(($handle-size - $bar-width) / 2) - $bar-border-width;
+$stat-colours: (
+    health: $red,
+    magic: $purple,
+    defense: $yellow,
+    speed: $turquoise,
+    luck: $blue
+);
+
+// noUiSlider overrides
+
+.noUi-target {
+    background: #ffffff;
+    border-radius: $bar-end-radius;
+    border: $bar-border;
+    box-shadow: none;
+}
+
+.noUi-connects {
+    border-radius: $bar-end-radius;
+}
+
+.noUi-horizontal {
+    height: $bar-width;
+}
+
+.noUi-horizontal .noUi-handle {
+    width: $handle-size;
+    height: $handle-size;
+    right: -17px;
+    top: $handle-top;
+}
+
+.noUi-handle {
+    border: $bar-border;
+    border-radius: 50%;
+    background: #FFF;
+    cursor: default;
+    box-shadow: none;
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+    content: none;
+    display: block;
+    position: absolute;
+    height: 14px;
+    width: 1px;
+    background: #E8E7E6;
+    left: 14px;
+    top: 6px;
+}
+
+@each $key, $colour in $stat-colours {
+    #stat-#{$key} {
+        .noUi-connect {
+            background: $colour;
+        }
+    }
+}

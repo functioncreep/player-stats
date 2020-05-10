@@ -6,22 +6,8 @@
 // ---------- BULMA CUSTOMIZATION ---------- \\
 
 // Import vars
-@import "../node_modules/bulma/sass/utilities/initial-variables.sass";
-@import "../node_modules/bulma/sass/utilities/functions.sass";
-@import "../node_modules/bulma/sass/utilities/derived-variables.sass";
+@import './sass/variables';
 
-$family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-$title-family: 'Major Mono Display', monospace;
-$subtitle-family: 'Major Mono Display', monospace;
-$title-weight: 400;
-$title-size: $size-1;
-
-$widescreen-enabled: false;
-$fullhd-enabled: false;
-
-$gap: 32px;
-$tablet: 720px;
-$desktop: $tablet + (2 * $gap);
 
 // ---------- BULMA IMPORTS ---------- \\
 

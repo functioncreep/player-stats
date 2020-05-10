@@ -1,10 +1,11 @@
 import React from 'react';
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
+import './StatBar.scss';
 
 class StatBar extends React.Component {
     componentDidMount() {
-        var slider = document.getElementById(this.props.id);
+        const slider = document.getElementById(this.props.id);
 
         noUiSlider.create(slider, {
             start: 0,
@@ -22,7 +23,7 @@ class StatBar extends React.Component {
                 to: function(value) {
                     return parseInt(value);
                 }
-            }
+            }     
         });
     }
 
@@ -30,7 +31,7 @@ class StatBar extends React.Component {
         return (
             <div className="columns">
                 <div className="column is-full">
-                    <h5 className='title is-5 is-captitalized'>{this.props.title}</h5>
+                    <h5 className='title is-5 is-capitalized has-text-weight-bold'>{this.props.title}</h5>
                     <div id={this.props.id}></div>
                 </div>
             </div>
