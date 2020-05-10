@@ -1,12 +1,57 @@
 import React from 'react';
 import './Stats.scss';
+import noUiSlider from 'nouislider';
+import 'nouislider/distribute/nouislider.css';
+
+class StatBar extends React.Component {
+    componentDidMount() {
+        var slider = document.getElementById(this.props.id);
+
+        noUiSlider.create(slider, {
+            start: 0,
+            connect: false,
+            range: {
+                'min': 0,
+                'max': 100
+            }
+        });
+    }
+
+    render() {
+        return (
+            <div className="columns">
+                <div className="column is-full">
+                    <h5 className='title is-5 is-captitalized'>{this.props.title}</h5>
+                    <div id={this.props.id}></div>
+                </div>
+            </div>
+        )
+    }
+}
+
 
 class Stats extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            categories: [
+                'health',
+                'magic',
+                'defense',
+                'speed',
+                'luck'
+            ]
+        }
     }
 
     render() {
+        const statBars = this.state.categories.map(category => {
+            const componentKey = 'stat-' + category;
+            return (<StatBar title={category} key={componentKey} id={'stat-' + category} />)
+        });
+
+        console.log(statBars);
+
         return(
             <div className="card">
                 <header className="card-header">
@@ -15,17 +60,14 @@ class Stats extends React.Component {
                 </header>
                 <div className="card-content">
                     <div className="content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-                        <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br />
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        {statBars}
                     </div>
                 </div>
-                <footer className="card-footer">
+                {/* <footer className="card-footer">
                     <a href="#" className="card-footer-item">Save</a>
                     <a href="#" className="card-footer-item">Edit</a>
                     <a href="#" className="card-footer-item">Delete</a>
-                </footer>
+                </footer> */}
             </div>
         )
     }
