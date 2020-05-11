@@ -53,3 +53,14 @@ $fullhd-enabled: false;
 $gap: 32px;
 $tablet: 720px;
 $desktop: $tablet + (2 * $gap);
+
+// Cards
+
+$card-header-shadow: none;
+
+// Misc
+
+$border: #000;
+$border-width: 2px;
+$card-border: $border-width solid $border;
+$card-footer-border-top: $card-border;

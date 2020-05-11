@@ -6,6 +6,7 @@ $bar-border-width: 2px;
 $bar-border: $bar-border-width solid #000000;
 $handle-size: $bar-width * 1.75;
 $handle-top: -(($handle-size - $bar-width) / 2) - $bar-border-width;
+$handle-right: -($handle-size / 2) - $bar-border-width / 2;
 $stat-colours: (
     health: $red,
     magic: $purple,
@@ -16,11 +17,45 @@ $stat-colours: (
 
 // noUiSlider overrides
 
+@keyframes handle-show {
+    0% {
+        opacity: 0%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+@keyframes handle-hide {
+    0% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0%;
+    }
+}
+
+.stat-block:hover .noUi-handle {
+    animation: handle-show 0.1s ease-out;
+    opacity: 100%;
+}
+
+.noUi-handle {
+    animation: handle-hide 0.1s ease-out;
+    opacity: 0%;
+    border: $bar-border;
+    border-radius: 50%;
+    background: #FFF;
+    cursor: pointer;
+    box-shadow: none;
+}
+
 .noUi-target {
     background: #ffffff;
     border-radius: $bar-end-radius;
     border: $bar-border;
     box-shadow: none;
+    cursor: pointer;
 }
 
 .noUi-connects {
@@ -34,16 +69,8 @@ $stat-colours: (
 .noUi-horizontal .noUi-handle {
     width: $handle-size;
     height: $handle-size;
-    right: -17px;
+    right: $handle-right;
     top: $handle-top;
-}
-
-.noUi-handle {
-    border: $bar-border;
-    border-radius: 50%;
-    background: #FFF;
-    cursor: default;
-    box-shadow: none;
 }
 
 .noUi-handle:before,
@@ -60,7 +87,7 @@ $stat-colours: (
 
 @each $key, $colour in $stat-colours {
     #stat-#{$key} {
-        .noUi-connect {
+        .noUi-connect, .noUi-handle {
             background: $colour;
         }
     }

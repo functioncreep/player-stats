@@ -8,7 +8,6 @@
 // Import vars
 @import './sass/variables';
 
-
 // ---------- BULMA IMPORTS ---------- \\
 
 @import "../node_modules/bulma/sass/utilities/animations.sass";
@@ -24,3 +23,12 @@
 @import "../node_modules/bulma/sass/layout/hero.sass";
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/grid/_all.sass";
+
+.card {
+    border: $card-border;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-bottom: $card-border;
+}
