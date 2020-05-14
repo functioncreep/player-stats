@@ -1,17 +1,13 @@
 import React from 'react';
 import './App.scss';
-import Stats from './stats/Stats';
-import PouchDB from 'pouchdb';
-
-var db = new PouchDB('my_database');
-console.log(db);
+import StatsBoard from './stats/StatsBoard';
 
 function App() {
   return (
     <div className="App">
       <div className="section">
         <div className="container">
-          <Stats />
+          <StatsBoard />
         </div>
       </div>
     </div>
