@@ -1,6 +1,10 @@
 import React from 'react';
 import './App.scss';
 import Stats from './stats/Stats';
+import PouchDB from 'pouchdb';
+
+var db = new PouchDB('my_database');
+console.log(db);
 
 function App() {
   return (

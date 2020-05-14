@@ -22,8 +22,6 @@ class Stats extends React.Component {
             return (<StatBar title={category} key={componentKey} id={'stat-' + category} />)
         });
 
-        console.log(statBars);
-
         return(
             <div className="card">
                 <header className="card-header">
