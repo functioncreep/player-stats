@@ -5,25 +5,30 @@ import StatBar from './StatBar';
 class StatsBoard extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            categories: [
-                'health',
-                'magic',
-                'defense',
-                'speed',
-                'luck'
-            ]
-        }
+        this.submitStats = this.submitStats.bind(this);
+        this.onChildLevelChange = this.onChildLevelChange.bind(this);
+    }
+
+    onChildLevelChange(stat) {
+        this.props.handleLevelChange(stat);
+    }
+    
+    submitStats() {
+        this.props.onStatsSubmit();
     }
 
     render() {
-        const statBars = this.state.categories.map((category, index) => {
+        const statBars = Object.keys(this.props.stats).map(category => {
             const componentKey = 'stat-' + category;
-            return (<StatBar
-                key={componentKey}
-                title={category}
-                level={this.props.stats[index]}
-                id={componentKey} />)
+            return (
+                <StatBar
+                    key={componentKey}
+                    category={category}
+                    level={this.props.stats[category]}
+                    id={componentKey}
+                    onLevelChange={this.onChildLevelChange}
+                />
+            )
         });
 
         return(
@@ -34,14 +39,12 @@ class StatsBoard extends React.Component {
                 </header>
                 <div className="card-content">
                     <div className="container">
-                        <form>
-                            {statBars}
-                        </form>
+                        {statBars}
                     </div>
                 </div>
                 <footer className="card-footer">
                     <div className="card-footer-item">
-                        <button className="button is-text is-fullwidth">Save</button>
+                        <button onClick={this.submitStats} className="button is-text is-fullwidth">Save</button>
                     </div>
                 </footer>
             </div>

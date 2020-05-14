@@ -6,8 +6,9 @@ import './StatBar.scss';
 class StatBar extends React.Component {
     constructor(props) {
         super(props);
-        this.levelChange = this.levelChange.bind(this);
+        this.changeLevel = this.changeLevel.bind(this);
     }
+
     componentDidMount() {
         const slider = document.getElementById(this.props.id);
 
@@ -32,20 +33,24 @@ class StatBar extends React.Component {
         });
 
         // Add event listeners
-        slider.noUiSlider.on('change', this.levelChange);
+        slider.noUiSlider.on('change', this.changeLevel);
     }
 
-    levelChange(values) {
-        console.log(values)
+    changeLevel(values) {
+        const newStat = {
+            category: this.props.category,
+            level: values[0]
+        };
+
+        this.props.onLevelChange(newStat);
     }
 
     render() {
         return (
             <div className="columns">
                 <div className="stat-block column is-full">
-                    <h5 className='title is-5 is-capitalized has-text-weight-bold'>{this.props.title}</h5>
+                    <h5 className='title is-5 is-capitalized has-text-weight-bold'>{this.props.category}</h5>
                     <div id={this.props.id}></div>
-                    <input type="hidden" />
                 </div>
             </div>
         )
