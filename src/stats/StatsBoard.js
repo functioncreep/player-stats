@@ -17,9 +17,13 @@ class StatsBoard extends React.Component {
     }
 
     render() {
-        const statBars = this.state.categories.map(category => {
+        const statBars = this.state.categories.map((category, index) => {
             const componentKey = 'stat-' + category;
-            return (<StatBar title={category} key={componentKey} id={'stat-' + category} />)
+            return (<StatBar
+                key={componentKey}
+                title={category}
+                level={this.props.stats[index]}
+                id={componentKey} />)
         });
 
         return(
@@ -30,9 +34,16 @@ class StatsBoard extends React.Component {
                 </header>
                 <div className="card-content">
                     <div className="container">
-                        {statBars}
+                        <form>
+                            {statBars}
+                        </form>
                     </div>
                 </div>
+                <footer className="card-footer">
+                    <div className="card-footer-item">
+                        <button className="button is-text is-fullwidth">Save</button>
+                    </div>
+                </footer>
             </div>
         )
     }

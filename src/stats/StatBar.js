@@ -4,11 +4,15 @@ import 'nouislider/distribute/nouislider.css';
 import './StatBar.scss';
 
 class StatBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.levelChange = this.levelChange.bind(this);
+    }
     componentDidMount() {
         const slider = document.getElementById(this.props.id);
 
         noUiSlider.create(slider, {
-            start: 5,
+            start: this.props.level,
             step: 5,
             connect: 'lower',
             tooltips: false,
@@ -26,6 +30,13 @@ class StatBar extends React.Component {
                 }
             }     
         });
+
+        // Add event listeners
+        slider.noUiSlider.on('change', this.levelChange);
+    }
+
+    levelChange(values) {
+        console.log(values)
     }
 
     render() {
@@ -34,6 +45,7 @@ class StatBar extends React.Component {
                 <div className="stat-block column is-full">
                     <h5 className='title is-5 is-capitalized has-text-weight-bold'>{this.props.title}</h5>
                     <div id={this.props.id}></div>
+                    <input type="hidden" />
                 </div>
             </div>
         )

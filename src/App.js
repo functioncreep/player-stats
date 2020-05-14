@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.scss';
-import StatsBoard from './stats/StatsBoard';
+import Stats from './stats/Stats';
 
 function App() {
   return (
     <div className="App">
       <div className="section">
         <div className="container">
-          <StatsBoard />
+          <Stats />
         </div>
       </div>
     </div>
