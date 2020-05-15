@@ -10,7 +10,7 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: null,
+            date: new Date(),
             stats: {
                 health: 5,
                 magic: 5,
@@ -22,6 +22,7 @@ class Stats extends React.Component {
         this.getLatestStats = this.getLatestStats.bind(this);
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
+        this.insertStatsFromDb = this.insertStatsFromDb.bind(this);
     }
 
     componentDidMount() {
@@ -32,7 +33,42 @@ class Stats extends React.Component {
         // Check if there's already an entry in the DB for today
         const now = new Date();
         const today = IdHandler.formatDate(now);
-        console.log(today);
+
+        db.get(today).then(doc => {
+            this.insertStatsFromDb(doc);
+        }).catch(error => {
+            if (
+                !(error.constructor.name === "PouchError")
+                || error.status !== 404
+            ) {
+                throw error;
+            }
+
+            // If no doc found, retrieve last entry
+            db.allDocs({
+                include_docs: true,
+                update_seq: true,
+                limit: 1,
+                descending: true
+            }).then(results => {
+                this.insertStatsFromDb(results.rows[0].doc);
+            }).catch(error => {
+                console.log('Error retrieving all docs:', error);
+            });
+        })
+    }
+
+    insertStatsFromDb(doc) {
+        let newState = {
+            date: new Date(doc._id),
+            stats: {}
+        }
+
+        Object.keys(this.state.stats).map(key => {
+            return newState.stats[key] = doc[key];
+        });
+
+        this.setState(newState);
     }
 
     handleLevelChange(updatedStat) {
