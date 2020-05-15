@@ -1,6 +1,7 @@
 import React from 'react';
 import StatsBoard from './StatsBoard';
 import PouchDB from 'pouchdb';
+import IdHandler from '../utilities/IdHandler';
 
 const db = new PouchDB('player-stats');
 const remoteCouch = false;
@@ -9,23 +10,39 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            date: null,
             stats: {
                 health: 5,
-                magic: 75,
-                defense: 55,
-                speed: 20,
-                luck: 100
+                magic: 5,
+                defense: 5,
+                speed: 5,
+                luck: 5
             }
         }
+        this.getLatestStats = this.getLatestStats.bind(this);
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
+    }
+
+    componentDidMount() {
+        this.getLatestStats();
+    }
+
+    getLatestStats() {
+        // Check if there's already an entry in the DB for today
+        const now = new Date();
+        const today = IdHandler.formatDate(now);
+        console.log(today);
     }
 
     handleLevelChange(updatedStat) {
         this.setState(state => {
             const newStats = Object.assign({}, state.stats);
             newStats[updatedStat.category] = updatedStat.level;
-            return {stats: newStats};
+            return {
+                date: this.state.date,
+                stats: newStats
+            };
         })
         console.log(this.state);
     }
