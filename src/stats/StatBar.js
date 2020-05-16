@@ -7,13 +7,14 @@ class StatBar extends React.Component {
     constructor(props) {
         super(props);
         this.changeLevel = this.changeLevel.bind(this);
+        this.setSlider = this.setSlider.bind(this);
     }
 
     componentDidMount() {
-        const slider = document.getElementById(this.props.id);
+        this.slider = document.getElementById(this.props.id);
 
-        noUiSlider.create(slider, {
-            start: this.props.level,
+        noUiSlider.create(this.slider, {
+            start: 5,
             step: 5,
             connect: 'lower',
             tooltips: false,
@@ -33,7 +34,12 @@ class StatBar extends React.Component {
         });
 
         // Add event listeners
-        slider.noUiSlider.on('change', this.changeLevel);
+        this.slider.noUiSlider.on('change', this.changeLevel);
+    }
+
+    setSlider(event) {
+        console.log('Setting slider!');
+        this.slider.noUiSlider.set(event.target.value);
     }
 
     changeLevel(values) {
@@ -46,11 +52,17 @@ class StatBar extends React.Component {
     }
 
     render() {
+        // Set slider val, but only after the component is mounted and the slider is created
+        if (this.slider) {
+            this.slider.noUiSlider.set(this.props.level);
+        }
+        
         return (
             <div className="columns">
                 <div className="stat-block column is-full">
                     <h5 className='title is-5 is-capitalized has-text-weight-bold'>{this.props.category}</h5>
                     <div id={this.props.id}></div>
+                    <input type='hidden' value={this.props.level} onChange={this.setSlider}/>
                 </div>
             </div>
         )

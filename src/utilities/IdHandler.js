@@ -21,6 +21,25 @@ class IdHandler {
 
         return shortDateString;
     }
+
+    
+    static parseDate(dateString) {
+        // Parameter checks
+        if (!dateString) {
+            throw new Error('IdHandler.parseDate(): dateString parameter cannot be empty.');
+        }
+        if (!(typeof dateString === 'string')) {
+            const errorString =
+                'input for IdHandler.parseDate() must be a string, not '
+                + dateString.constructor.name
+                + '.';
+            throw new TypeError(errorString);
+        }
+
+        const dateFromString = new Date(dateString);
+
+        return dateFromString;
+    }
 }
 
 export default IdHandler;

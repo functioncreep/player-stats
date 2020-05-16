@@ -1,6 +1,8 @@
 import React from 'react';
-import StatsBoard from './StatsBoard';
+import './Stats.scss';
+import StatBar from './StatBar';
 import PouchDB from 'pouchdb';
+import cloneObject from '../utilities/utilities';
 import IdHandler from '../utilities/IdHandler';
 
 const db = new PouchDB('player-stats');
@@ -17,7 +19,9 @@ class Stats extends React.Component {
                 defense: 5,
                 speed: 5,
                 luck: 5
-            }
+            },
+            lastUpdated: new Date()
+
         }
         this.getLatestStats = this.getLatestStats.bind(this);
         this.handleLevelChange = this.handleLevelChange.bind(this);
@@ -33,6 +37,7 @@ class Stats extends React.Component {
         // Check if there's already an entry in the DB for today
         const now = new Date();
         const today = IdHandler.formatDate(now);
+        console.log(this.state);
 
         db.get(today).then(doc => {
             this.insertStatsFromDb(doc);
@@ -51,22 +56,23 @@ class Stats extends React.Component {
                 limit: 1,
                 descending: true
             }).then(results => {
-                this.insertStatsFromDb(results.rows[0].doc);
+                if (results.total_rows > 0) {
+                    this.insertStatsFromDb(results.rows[0].doc);
+                }
             }).catch(error => {
                 console.log('Error retrieving all docs:', error);
+                console.log(this.state);
             });
         })
     }
 
     insertStatsFromDb(doc) {
+        console.log(IdHandler.parseDate(doc._id));
         let newState = {
-            date: new Date(doc._id),
-            stats: {}
+            date: IdHandler.parseDate(doc._id),
+            stats: doc.stats,
+            lastUpdated: doc.lastUpdated
         }
-
-        Object.keys(this.state.stats).map(key => {
-            return newState.stats[key] = doc[key];
-        });
 
         this.setState(newState);
     }
@@ -84,9 +90,11 @@ class Stats extends React.Component {
     }
 
     addStatsToDb() {
-        const newStats = Object.assign({
+        const newStats = {
             _id: new Date().toISOString(),
-        }, this.state.stats);
+            stats: this.state.stats,
+            lastUpdated: Date()
+        }
 
         db.put(newStats, (err, result) => {
             if (!err) {
@@ -103,13 +111,38 @@ class Stats extends React.Component {
     }
 
     render() {
-        return (
-            <StatsBoard
-                stats={this.state.stats}
-                handleLevelChange={this.handleLevelChange}
-                onStatsSubmit={this.addStatsToDb}
-            />
-        );
+        const headerDate = this.state.date.toLocaleDateString();
+        const statBars = Object.keys(this.state.stats).map(category => {
+            const componentKey = 'stat-' + category;
+            return (
+                <StatBar
+                    key={componentKey}
+                    category={category}
+                    level={this.state.stats[category]}
+                    id={componentKey}
+                    onLevelChange={this.handleLevelChange}
+                />
+            )
+        });
+
+        return(
+            <div className="card">
+                <header className="card-header">
+                    <p className="card-header-title subtitle is-marginless">staTs</p>
+                    <p className="subtitle stats-date">{headerDate}</p>
+                </header>
+                <div className="card-content">
+                    <div className="container">
+                        {statBars}
+                    </div>
+                </div>
+                <footer className="card-footer">
+                    <div className="card-footer-item">
+                        <button onClick={this.addStatsToDb} className="button is-text is-fullwidth">Save</button>
+                    </div>
+                </footer>
+            </div>
+        )
     }
 }
 

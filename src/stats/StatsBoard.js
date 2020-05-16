@@ -1,5 +1,5 @@
 import React from 'react';
-import './StatsBoard.scss';
+// import './StatsBoard.scss';
 import StatBar from './StatBar';
 
 class StatsBoard extends React.Component {
