@@ -43,6 +43,8 @@ $dark: $grey-darker;
 $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 $title-family: 'Press Start 2P', monospace;
 $subtitle-family: 'Press Start 2P', monospace;
+$title-color: #000;
+$subtitle-color: $title-color;
 $title-weight: 400;
 $title-size: $size-2;
 
@@ -56,8 +58,10 @@ $desktop: $tablet + (2 * $gap);
 
 // Cards
 
-$card-shadow: none;
+// $card-shadow: none;
+$card-shadow: 10px 10px 0 0 #dadada;
 $card-header-shadow: none;
+$card-header-color: $title-color;
 
 // Misc
 

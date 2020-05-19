@@ -60,7 +60,7 @@ class StatBar extends React.Component {
         return (
             <div className="columns">
                 <div className="stat-block column is-full">
-                    <h6 className='title is-6 is-capitalized'>{this.props.category}</h6>
+                    <h5 className='title is-5 is-capitalized'>{this.props.category}</h5>
                     <div id={this.props.id}></div>
                     <input type='hidden' value={this.props.level} onChange={this.setSlider}/>
                 </div>
