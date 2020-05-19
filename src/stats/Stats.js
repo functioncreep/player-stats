@@ -102,6 +102,7 @@ class Stats extends React.Component {
         if (this.state.fresh) {
             db.put(newStats).then(response => {
                 console.log('FRESH STATS ADDED:', response);
+                this.setState({ fresh: false });
             }).catch(error => {
                 throw new Error(error);
             });
