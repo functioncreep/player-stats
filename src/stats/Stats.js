@@ -31,7 +31,6 @@ class Stats extends React.Component {
             allTags: [],
             stats: defaultStats,
         }
-        this.getAllTags = this.getAllTags.bind(this);
         this.getLatestStats = this.getLatestStats.bind(this);
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
@@ -39,7 +38,6 @@ class Stats extends React.Component {
     }
 
     componentDidMount() {
-        this.getAllTags();
         this.getLatestStats();
     }
 
