@@ -2,11 +2,32 @@ import React from 'react';
 import './Stats.scss';
 import StatBar from './StatBar';
 import PouchDB from 'pouchdb';
+import find from 'pouchdb-find';
+import rel from 'relational-pouch';
 import cloneObject from '../utilities/utilities';
 import Loading from '../common/Loading';
 
+// const PouchDB = require('pouchdb');
+PouchDB.plugin(find);
+PouchDB.plugin(rel);
+
 const db = new PouchDB('player-stats');
-const remoteCouch = false;
+db.setSchema([
+    {
+        singular: 'entry',
+        plural: 'entries',
+        relations: {
+            tags: {hasMany: 'tag'}
+        }
+    },
+    {
+        singular: 'tag',
+        plural: 'tags',
+        relations: {
+            entries: {hasMany: 'entry'}
+        }
+    }
+]);
 
 const defaultStats = {
     date: new Date().toLocaleDateString(),
