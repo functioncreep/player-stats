@@ -8,6 +8,19 @@ import Loading from '../common/Loading';
 const db = new PouchDB('player-stats');
 const remoteCouch = false;
 
+const defaultStats = {
+    date: new Date().toLocaleDateString(),
+    levels: {
+        health: 5,
+        magic: 5,
+        defense: 5,
+        speed: 5,
+        luck: 5
+    },
+    tags: [],
+    lastUpdated: new Date().toISOString()
+}
+
 class Stats extends React.Component {
     constructor(props) {
         super(props);
@@ -15,18 +28,10 @@ class Stats extends React.Component {
             loading: true,
             saving: false,
             fresh: false,
-            stats: {
-                date: new Date().toLocaleDateString(),
-                levels: {
-                    health: 5,
-                    magic: 5,
-                    defense: 5,
-                    speed: 5,
-                    luck: 5
-                },
-                lastUpdated: new Date().toISOString()
-            },
+            allTags: [],
+            stats: defaultStats,
         }
+        this.getAllTags = this.getAllTags.bind(this);
         this.getLatestStats = this.getLatestStats.bind(this);
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
@@ -34,6 +39,7 @@ class Stats extends React.Component {
     }
 
     componentDidMount() {
+        this.getAllTags();
         this.getLatestStats();
     }
 
