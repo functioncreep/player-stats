@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 // Google fonts
-@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat&display=swap');
 
 // Font Awesome
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
@@ -50,6 +50,6 @@
     position: absolute;
     right: 0;
     top: 50px;
-    padding: 0.5em;
-    color: #dadada;
+    padding: 0.75em;
+    color: #000;
 }

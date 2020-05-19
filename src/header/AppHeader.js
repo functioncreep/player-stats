@@ -2,9 +2,9 @@ import React from 'react';
 
 function AppHeader() {
     return (
-        <div className="section is-paddingless">
+        <div className="section">
             <div className="container">
-                <h1 className="title has-text-centered">PlAyeR staTs!</h1>
+                <h3 className="title is-3 has-text-centered">PLAYER STATS!</h3>
             </div>
         </div>
     )

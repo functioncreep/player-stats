@@ -12,7 +12,7 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fetching: true,
+            loading: true,
             saving: false,
             fresh: false,
             stats: {
@@ -42,7 +42,7 @@ class Stats extends React.Component {
         db.get(this.state.stats.date).then(doc => {
             this.insertStatsFromDb(doc);
             this.setState({
-                fetching: false,
+                loading: false,
                 fresh: false
             });
         }).catch(error => {
@@ -64,7 +64,7 @@ class Stats extends React.Component {
                     this.insertStatsFromDb(results.rows[0].doc);
                 }
                 this.setState({
-                    fetching: false,
+                    loading: false,
                     fresh: true
                 });
             }).catch(error => {
@@ -145,10 +145,10 @@ class Stats extends React.Component {
 
         return(
             <div className="card">
-                { this.state.fetching ? <Loading message="FeTching StaTS" /> : null }
+                { this.state.loading ? <Loading message="Loading Stats" /> : null }
                 <header className="card-header">
-                    <p className="card-header-title subtitle is-marginless">staTs</p>
-                    <p className="subtitle stats-date">{headerDate}</p>
+                    <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
+                    <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
                 </header>
                 <div className="card-content">
                     <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">

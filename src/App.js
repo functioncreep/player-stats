@@ -5,7 +5,7 @@ import Stats from './stats/Stats';
 function App() {
   return (
     <div className="App">
-      <div className="section">
+      <div className="section is-paddingless">
         <div className="container">
           <Stats />
         </div>

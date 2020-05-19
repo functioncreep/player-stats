@@ -1,7 +1,7 @@
 import React from 'react';
 
 const loadingTextStyle = {
-    width: 405
+    width: 325
 };
 
 const colStyle = {
@@ -52,7 +52,7 @@ class Loading extends React.Component {
         return (
             <div className="loading-overlay columns is-vcentered">
                 <div style={colStyle} className="column is-full is-flex">
-                    <h3 style={loadingTextStyle} className="title is-3">{this.state.loadingText}</h3>
+                    <h5 style={loadingTextStyle} className="title is-5">{this.state.loadingText}</h5>
                 </div>
             </div>
         )
