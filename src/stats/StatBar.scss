@@ -94,3 +94,10 @@ $stat-colours: (
         }
     }
 }
+
+.noUi-state-tap .noUi-connect,
+.noUi-state-tap .noUi-origin {
+  -webkit-transition: transform 0.25s;
+  transition: transform 0.25s;
+  transition-timing-function: steps(8);
+}
