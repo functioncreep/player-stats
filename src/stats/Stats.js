@@ -2,7 +2,6 @@ import React from 'react';
 import './Stats.scss';
 import StatBar from './StatBar';
 import PouchDB from 'pouchdb';
-import IdHandler from '../utilities/IdHandler';
 import cloneObject from '../utilities/utilities';
 import Loading from '../common/Loading';
 
@@ -14,8 +13,9 @@ class Stats extends React.Component {
         super(props);
         this.state = {
             loading: true,
+            fresh: false,
             stats: {
-                date: new Date().toISOString(),
+                date: new Date().toLocaleDateString(),
                 levels: {
                     health: 5,
                     magic: 5,
@@ -33,19 +33,17 @@ class Stats extends React.Component {
     }
 
     componentDidMount() {
-        // Testing loading text...
-        setTimeout(() => {
-            this.getLatestStats();
-        }, 5000);
+        this.getLatestStats();
     }
 
     getLatestStats() {
         // Check if there's already an entry in the DB for today
-        const now = new Date();
-        const today = IdHandler.formatDate(now);
-
-        db.get(today).then(doc => {
+        db.get(this.state.stats.date).then(doc => {
             this.insertStatsFromDb(doc);
+            this.setState({
+                loading: false,
+                fresh: false
+            });
         }).catch(error => {
             if (
                 !(error.constructor.name === "PouchError")
@@ -63,8 +61,11 @@ class Stats extends React.Component {
             }).then(results => {
                 if (results.total_rows > 0) {
                     this.insertStatsFromDb(results.rows[0].doc);
-                    this.setState({ loading: false });
                 }
+                this.setState({
+                    loading: false,
+                    fresh: true
+                });
             }).catch(error => {
                 console.log('Error retrieving all docs:', error);
                 console.log(this.state);
@@ -76,7 +77,7 @@ class Stats extends React.Component {
         const newState = cloneObject(this.state);
 
         newState.stats = {
-            date: doc._id,
+            date: new Date().toLocaleDateString(),
             levels: doc.levels,
             lastUpdated: doc.lastUpdated
         }
@@ -88,35 +89,37 @@ class Stats extends React.Component {
 
         newState.stats.levels[updatedStat.category] = updatedStat.level;
         this.setState(newState);
+        this.addStatsToDb();
     }
 
     addStatsToDb() {
-        console.log('click?');
         const newStats = {
-            _id: new Date().toISOString(),
+            _id: new Date().toLocaleDateString(),
             levels: this.state.stats.levels,
             lastUpdated: new Date().toISOString()
         }
 
-        db.put(newStats, (err, result) => {
-            if (!err) {
-                console.log('Stats added!:');
-                console.log(result);
-                db.allDocs({include_docs: true}).then(docs => {
-                    console.log('ALL DOCS:');
-                    console.log(docs);
-                }).catch(err => {
-                    console.log('DANGER WILL ROBINSON:', err);
-                })
-            } else {
-                console.log('Error adding docs!:', err);
-            }
-        })
+        if (this.state.fresh) {
+            db.put(newStats).then(response => {
+                console.log('FRESH STATS ADDED:', response);
+            }).catch(error => {
+                throw new Error(error);
+            });
+        } else {
+            db.get(newStats._id).then(doc => {
+                newStats._rev = doc._rev;
+                return db.put(newStats);
+            }).then(response => {
+                console.log('STATS UPDATED:', response);
+            }).catch(error => {
+                throw new Error(error);
+            });
+        }
     }
 
     render() {
         // console.log('STATE ----->', this.state);
-        const headerDate = new Date(this.state.stats.date).toLocaleDateString();
+        const headerDate = this.state.stats.date;
         const statBars = Object.keys(this.state.stats.levels).map(category => {
             const componentKey = 'stat-' + category;
             return (
@@ -129,29 +132,24 @@ class Stats extends React.Component {
                 />
             )
         });
-        let statDisplay;
-        if (this.state.loading) {
-            statDisplay = <Loading message="FeTching StaTS" />;
-        } else {
-            statDisplay = statBars
-        }
 
         return(
             <div className="card">
+                { this.state.loading ? <Loading message="FeTching StaTS" /> : null }
                 <header className="card-header">
                     <p className="card-header-title subtitle is-marginless">staTs</p>
                     <p className="subtitle stats-date">{headerDate}</p>
                 </header>
                 <div className="card-content">
                     <div className="container">
-                        {statDisplay}
+                        { statBars }
                     </div>
                 </div>
-                <footer className="card-footer">
+                {/* <footer className="card-footer">
                     <div className="card-footer-item">
                         <button onClick={this.addStatsToDb} className="button is-text is-fullwidth">Save</button>
                     </div>
-                </footer>
+                </footer> */}
             </div>
         )
     }

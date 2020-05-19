@@ -1,20 +1,32 @@
 import React from 'react';
 
+const loadingTextStyle = {
+    width: 405
+};
+
+const colStyle = {
+    justifyContent: 'center'
+};
+
 class Loading extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            loadingText: this.props.message
+            loadingText: this.props.message + '...'
         }
-        this.animatDots = this.animatDots.bind(this);
+        this.animateDots = this.animateDots.bind(this);
+        this.timeout = null;
     }
 
     componentDidMount() {
-        this.animatDots();
+        this.animateDots();
     }
 
-    animatDots() {
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
+    }
+
+    animateDots() {
         let count = 0;
         const dot = '.';
 
@@ -22,7 +34,7 @@ class Loading extends React.Component {
             const numberDots = count % 4;
             const dots = dot.repeat(numberDots);
 
-            setTimeout(() => {
+            this.timeout = setTimeout(() => {
                 this.setState({
                     loading: this.state.loading,
                     loadingText:
@@ -38,7 +50,11 @@ class Loading extends React.Component {
     
     render() {
         return (
-            <h2 className="title">{this.state.loadingText}</h2>
+            <div className="loading-overlay columns is-vcentered">
+                <div style={colStyle} className="column is-full is-flex">
+                    <h3 style={loadingTextStyle} className="title is-3">{this.state.loadingText}</h3>
+                </div>
+            </div>
         )
     }
 }
