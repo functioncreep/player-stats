@@ -152,7 +152,7 @@ class Stats extends React.Component {
                 </header>
                 <div className="card-content">
                     <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">
-                        <i className="fas fa-spinner fa-lg fa-pulse"></i>
+                        <i className="fas fa-spinner fa-2x fa-pulse"></i>
                     </span>
                     <div className="container">
                         { statBars }

@@ -1,10 +1,10 @@
 @import '../sass/variables';
 
-$bar-width: 18px;
-$bar-end-radius: $bar-width / 2;
+$bar-width: 24px;
+$bar-end-radius: 8px;
 $bar-border-width: 4px;
 $bar-border: $bar-border-width solid #000000;
-$handle-size: $bar-width * 1.75;
+$handle-size: $bar-width * 1.5;
 $handle-top: -(($handle-size - $bar-width) / 2) - $bar-border-width;
 $handle-right: -($handle-size / 2) - $bar-border-width / 2;
 $stat-colours: (
@@ -61,7 +61,7 @@ $stat-colours: (
 }
 
 .noUi-connects {
-    border-radius: $bar-end-radius;
+    border-radius: $bar-end-radius / 2;
 }
 
 .noUi-horizontal {
