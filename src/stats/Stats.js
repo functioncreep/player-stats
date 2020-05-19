@@ -12,7 +12,8 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
+            fetching: true,
+            saving: false,
             fresh: false,
             stats: {
                 date: new Date().toLocaleDateString(),
@@ -41,7 +42,7 @@ class Stats extends React.Component {
         db.get(this.state.stats.date).then(doc => {
             this.insertStatsFromDb(doc);
             this.setState({
-                loading: false,
+                fetching: false,
                 fresh: false
             });
         }).catch(error => {
@@ -63,7 +64,7 @@ class Stats extends React.Component {
                     this.insertStatsFromDb(results.rows[0].doc);
                 }
                 this.setState({
-                    loading: false,
+                    fetching: false,
                     fresh: true
                 });
             }).catch(error => {
@@ -87,9 +88,11 @@ class Stats extends React.Component {
     handleLevelChange(updatedStat) {
         const newState = cloneObject(this.state); 
 
-        newState.stats.levels[updatedStat.category] = updatedStat.level;
-        this.setState(newState);
-        this.addStatsToDb();
+        if (newState.stats.levels[updatedStat.category] !== updatedStat.level) {
+            newState.stats.levels[updatedStat.category] = updatedStat.level;
+            this.setState(newState);
+            this.addStatsToDb();
+        }
     }
 
     addStatsToDb() {
@@ -99,10 +102,15 @@ class Stats extends React.Component {
             lastUpdated: new Date().toISOString()
         }
 
+        this.setState({ saving: true });
+
         if (this.state.fresh) {
             db.put(newStats).then(response => {
                 console.log('FRESH STATS ADDED:', response);
-                this.setState({ fresh: false });
+                this.setState({
+                    fresh: false,
+                    saving: false
+                });
             }).catch(error => {
                 throw new Error(error);
             });
@@ -112,14 +120,15 @@ class Stats extends React.Component {
                 return db.put(newStats);
             }).then(response => {
                 console.log('STATS UPDATED:', response);
+                this.setState({ saving: false });
             }).catch(error => {
+                this.setState({ saving: false });
                 throw new Error(error);
             });
         }
     }
 
     render() {
-        // console.log('STATE ----->', this.state);
         const headerDate = this.state.stats.date;
         const statBars = Object.keys(this.state.stats.levels).map(category => {
             const componentKey = 'stat-' + category;
@@ -136,12 +145,15 @@ class Stats extends React.Component {
 
         return(
             <div className="card">
-                { this.state.loading ? <Loading message="FeTching StaTS" /> : null }
+                { this.state.fetching ? <Loading message="FeTching StaTS" /> : null }
                 <header className="card-header">
                     <p className="card-header-title subtitle is-marginless">staTs</p>
                     <p className="subtitle stats-date">{headerDate}</p>
                 </header>
                 <div className="card-content">
+                    <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">
+                        <i className="fas fa-spinner fa-lg fa-pulse"></i>
+                    </span>
                     <div className="container">
                         { statBars }
                     </div>
