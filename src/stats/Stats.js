@@ -95,37 +95,6 @@ class Stats extends React.Component {
         }).catch(error => {
             throw error;
         });
-
-    //     db.get(this.state.stats.date).then(doc => {
-    //         this.insertStatsFromDb(doc);
-    //         this.setState({
-    //             loading: false,
-    //             fresh: false
-    //         });
-    //     }).catch(error => {
-    //         if (error.name !== 'not_found') {
-    //             throw error;
-    //         }
-            
-    //         // If no doc found, retrieve last entry
-    //         db.allDocs({
-    //             include_docs: true,
-    //             update_seq: true,
-    //             limit: 1,
-    //             descending: true
-    //         }).then(results => {
-    //             if (results.total_rows > 0) {
-    //                 this.insertStatsFromDb(results.rows[0].doc);
-    //             }
-    //             this.setState({
-    //                 loading: false,
-    //                 fresh: true
-    //             });
-    //         }).catch(error => {
-    //             console.log('Error retrieving all docs:', error);
-    //             console.log(this.state);
-    //         });
-    //     })
     }
 
     insertStatsFromDb(doc) {
@@ -169,16 +138,6 @@ class Stats extends React.Component {
             }).catch(error => {
                 throw new Error(error);
             });
-
-            // db.put(newStats).then(result => {
-            //     console.log('FRESH STATS ADDED:', result);
-            //     this.setState({
-            //         fresh: false,
-            //         saving: false
-            //     });
-            // }).catch(error => {
-            //     throw new Error(error);
-            // });
         } else {
             db.rel.find('entry', newStats.id).then(entry => {
                 newStats.rev = entry.rev;
@@ -190,17 +149,6 @@ class Stats extends React.Component {
                 this.setState({ saving: false });
                 throw new Error(error);
             });
-
-            // db.get(newStats._id).then(doc => {
-            //     newStats._rev = doc._rev;
-            //     return db.put(newStats);
-            // }).then(result => {
-            //     console.log('STATS UPDATED:', result);
-            //     this.setState({ saving: false });
-            // }).catch(error => {
-            //     this.setState({ saving: false });
-            //     throw new Error(error);
-            // });
         }
     }
 
@@ -234,11 +182,6 @@ class Stats extends React.Component {
                         { statBars }
                     </div>
                 </div>
-                {/* <footer className="card-footer">
-                    <div className="card-footer-item">
-                        <button onClick={this.addStatsToDb} className="button is-text is-fullwidth">Save</button>
-                    </div>
-                </footer> */}
             </div>
         )
     }
