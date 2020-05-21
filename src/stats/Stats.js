@@ -64,39 +64,68 @@ class Stats extends React.Component {
 
     getLatestStats() {
         // Check if there's already an entry in the DB for today
-        db.get(this.state.stats.date).then(doc => {
-            this.insertStatsFromDb(doc);
-            this.setState({
-                loading: false,
-                fresh: false
-            });
-        }).catch(error => {
-            if (
-                !(error.constructor.name === "PouchError")
-                || error.status !== 404
-            ) {
-                throw error;
-            }
-            
-            // If no doc found, retrieve last entry
-            db.allDocs({
-                include_docs: true,
-                update_seq: true,
-                limit: 1,
-                descending: true
-            }).then(results => {
-                if (results.total_rows > 0) {
-                    this.insertStatsFromDb(results.rows[0].doc);
-                }
+        db.rel.find('entry', this.state.stats.date).then(result => {
+            if (result.entries.length > 0) {
+                this.insertStatsFromDb(result.entries[0]);
                 this.setState({
                     loading: false,
-                    fresh: true
+                    fresh: false
                 });
-            }).catch(error => {
-                console.log('Error retrieving all docs:', error);
-                console.log(this.state);
-            });
-        })
+            } else {
+                // If no doc found, retrieve last entry
+                db.rel.find('entry', {
+                    include_docs: true,
+                    update_seq: true,
+                    limit: 1,
+                    descending: true
+                }).then(result => {
+                    if (result.entries.length > 0) {
+                        this.insertStatsFromDb(result.entries[0]);
+                    } else {
+                        throw new Error('No entries could be retrieved.');
+                    }
+                    this.setState({
+                        loading: false,
+                        fresh: true
+                    });
+                }).catch(error => {
+                    console.log('Error retrieving all entries:', error);
+                });
+            }
+        }).catch(error => {
+            throw error;
+        });
+
+    //     db.get(this.state.stats.date).then(doc => {
+    //         this.insertStatsFromDb(doc);
+    //         this.setState({
+    //             loading: false,
+    //             fresh: false
+    //         });
+    //     }).catch(error => {
+    //         if (error.name !== 'not_found') {
+    //             throw error;
+    //         }
+            
+    //         // If no doc found, retrieve last entry
+    //         db.allDocs({
+    //             include_docs: true,
+    //             update_seq: true,
+    //             limit: 1,
+    //             descending: true
+    //         }).then(results => {
+    //             if (results.total_rows > 0) {
+    //                 this.insertStatsFromDb(results.rows[0].doc);
+    //             }
+    //             this.setState({
+    //                 loading: false,
+    //                 fresh: true
+    //             });
+    //         }).catch(error => {
+    //             console.log('Error retrieving all docs:', error);
+    //             console.log(this.state);
+    //         });
+    //     })
     }
 
     insertStatsFromDb(doc) {
@@ -122,16 +151,17 @@ class Stats extends React.Component {
 
     addStatsToDb() {
         const newStats = {
-            _id: new Date().toLocaleDateString(),
+            id: new Date().toLocaleDateString(),
             levels: this.state.stats.levels,
+            tags: this.state.stats.tags,
             lastUpdated: new Date().toISOString()
         }
 
         this.setState({ saving: true });
 
         if (this.state.fresh) {
-            db.put(newStats).then(response => {
-                console.log('FRESH STATS ADDED:', response);
+            db.rel.save('entry', newStats).then(result => {
+                console.log('FRESH STATS ADDED:', result);
                 this.setState({
                     fresh: false,
                     saving: false
@@ -139,17 +169,38 @@ class Stats extends React.Component {
             }).catch(error => {
                 throw new Error(error);
             });
+
+            // db.put(newStats).then(result => {
+            //     console.log('FRESH STATS ADDED:', result);
+            //     this.setState({
+            //         fresh: false,
+            //         saving: false
+            //     });
+            // }).catch(error => {
+            //     throw new Error(error);
+            // });
         } else {
-            db.get(newStats._id).then(doc => {
-                newStats._rev = doc._rev;
-                return db.put(newStats);
-            }).then(response => {
-                console.log('STATS UPDATED:', response);
+            db.rel.find('entry', newStats.id).then(entry => {
+                newStats.rev = entry.rev;
+                return db.rel.save('entry', newStats);
+            }).then(result => {
+                console.log('STATS UPDATED:', result);
                 this.setState({ saving: false });
             }).catch(error => {
                 this.setState({ saving: false });
                 throw new Error(error);
             });
+
+            // db.get(newStats._id).then(doc => {
+            //     newStats._rev = doc._rev;
+            //     return db.put(newStats);
+            // }).then(result => {
+            //     console.log('STATS UPDATED:', result);
+            //     this.setState({ saving: false });
+            // }).catch(error => {
+            //     this.setState({ saving: false });
+            //     throw new Error(error);
+            // });
         }
     }
 
