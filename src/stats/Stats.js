@@ -136,18 +136,21 @@ class Stats extends React.Component {
                     saving: false
                 });
             }).catch(error => {
-                throw new Error(error);
+                throw error;
             });
         } else {
-            db.rel.find('entry', newStats.id).then(entry => {
-                newStats.rev = entry.rev;
+            db.rel.find('entry', newStats.id).then(result => {
+                if (result.entries.length === 0) {
+                    throw new Error('Error retrieving entry for update (none returned)');
+                }
+                newStats.rev = result.entries[0].rev;
                 return db.rel.save('entry', newStats);
             }).then(result => {
                 console.log('STATS UPDATED:', result);
                 this.setState({ saving: false });
             }).catch(error => {
                 this.setState({ saving: false });
-                throw new Error(error);
+                throw error;
             });
         }
     }
