@@ -171,18 +171,30 @@ class Stats extends React.Component {
         });
 
         return(
-            <div className="card">
-                { this.state.loading ? <Loading message="Loading Stats" /> : null }
-                <header className="card-header">
-                    <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
-                    <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
-                </header>
-                <div className="card-content">
-                    <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">
-                        <i className="fas fa-spinner fa-2x fa-pulse"></i>
-                    </span>
-                    <div className="container">
-                        { statBars }
+            <div className="container">
+
+                <div className="columns">
+                    <div className="column is-full">
+                        <button className="button">Close</button>
+                    </div>
+                </div>
+                <div className="columns">
+                    <div className="column is-full">
+                        <div className="card">
+                            { this.state.loading ? <Loading message="Loading Stats" /> : null }
+                            <header className="card-header">
+                                <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
+                                <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
+                            </header>
+                            <div className="card-content">
+                                <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">
+                                    <i className="fas fa-spinner fa-2x fa-pulse"></i>
+                                </span>
+                                <div className="container">
+                                    { statBars }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

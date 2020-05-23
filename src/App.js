@@ -6,9 +6,7 @@ function App() {
   return (
     <div className="App">
       <div className="section is-paddingless">
-        <div className="container">
-          <Stats />
-        </div>
+        <Stats />
       </div>
     </div>
   );

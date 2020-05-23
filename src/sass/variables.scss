@@ -38,9 +38,16 @@ $danger: $red;
 $light: $white-ter;
 $dark: $grey-darker;
 
+// Misc
+
+$radius: 10px;
+$radius-small: $radius;
+$border: #000;
+$border-width: 4px;
+
 // Typography
 
-$family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$family-sans-serif: 'Press Start 2P', monospace;
 $title-family: 'Press Start 2P', monospace;
 $subtitle-family: 'Press Start 2P', monospace;
 $title-color: #000;
@@ -58,14 +65,13 @@ $desktop: $tablet + (2 * $gap);
 
 // Cards
 
-// $card-shadow: none;
 $card-shadow: 10px 10px 0 0 #dadada;
 $card-header-shadow: none;
 $card-header-color: $title-color;
-
-// Misc
-
-$border: #000;
-$border-width: 4px;
 $card-border: $border-width solid $border;
 $card-footer-border-top: $card-border;
+
+// Buttons
+
+$button-family: $family-sans-serif;
+$control-border-width: $border-width;
