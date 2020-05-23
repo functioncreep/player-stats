@@ -46,6 +46,7 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            panelClosed: false,
             loading: true,
             saving: false,
             fresh: false,
@@ -56,6 +57,7 @@ class Stats extends React.Component {
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
         this.insertStatsFromDb = this.insertStatsFromDb.bind(this);
+        this.toggleStatsPanelOpen = this.toggleStatsPanelOpen.bind(this);
     }
 
     componentDidMount() {
@@ -155,6 +157,12 @@ class Stats extends React.Component {
         }
     }
 
+    toggleStatsPanelOpen() {
+        this.setState({
+            panelClosed: this.state.panelClosed ? false : true
+        });
+    }
+
     render() {
         const headerDate = this.state.stats.date;
         const statBars = Object.keys(this.state.stats.levels).map(category => {
@@ -175,12 +183,12 @@ class Stats extends React.Component {
 
                 <div className="columns">
                     <div className="column is-full">
-                        <button className="button">Close</button>
+                        <button className="button" onClick={this.toggleStatsPanelOpen}>Close</button>
                     </div>
                 </div>
                 <div className="columns">
                     <div className="column is-full">
-                        <div className="card">
+                        <div className={"card stats-panel" + (this.state.panelClosed ? " closed" : " open")}>
                             { this.state.loading ? <Loading message="Loading Stats" /> : null }
                             <header className="card-header">
                                 <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>

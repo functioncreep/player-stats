@@ -1,3 +1,45 @@
+@import '../sass/variables';
+
+.stats-panel {
+    overflow: hidden;
+
+    .card-header {
+        height: 56px;
+        max-height: 56px;
+    }
+
+    &.open {
+        width: 100%;
+        height: 555px;
+        max-height: 555px;
+        min-height: 56px;
+        min-width: 56px;
+
+        transition:
+            height 0.2s steps(6),
+            width 0.2s 0.25s steps(6);
+    }
+
+    &.closed {
+        width: 56px;
+        height: 56px;
+
+        transition:
+            width 0.2s steps(6),
+            height 0.2s 0.2s steps(6);
+    }
+}
+
 .stats-date {
     padding: 0.75rem 1rem;
+}
+
+.saving-spinner {
+    position: absolute;
+    right: 0;
+    top: (50px + $border-width);
+    width: 56px;
+    height: 56px;
+    padding: 0.75em;
+    color: #000;
 }

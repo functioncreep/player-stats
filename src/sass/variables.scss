@@ -44,6 +44,12 @@ $radius: 10px;
 $radius-small: $radius;
 $border: #000;
 $border-width: 4px;
+$shadow-width: ($border-width * 2);
+$shadow-width-small: $border-width;
+$shadow-size: $shadow-width $shadow-width 0 0;
+$shadow-size-small: $shadow-width-small $shadow-width-small 0 0;
+$shadow-color: #ababab;
+$shadow: $shadow-size $shadow-color;
 
 // Typography
 
@@ -65,7 +71,7 @@ $desktop: $tablet + (2 * $gap);
 
 // Cards
 
-$card-shadow: 10px 10px 0 0 #dadada;
+$card-shadow: $shadow;
 $card-header-shadow: none;
 $card-header-color: $title-color;
 $card-border: $border-width solid $border;
@@ -73,5 +79,17 @@ $card-footer-border-top: $card-border;
 
 // Buttons
 
+$button-color: $black;
+$button-focus-box-shadow-size: $shadow-size;
+$button-focus-box-shadow-color: $shadow-color;
 $button-family: $family-sans-serif;
 $control-border-width: $border-width;
+$button-border-color: $border;
+$button-hover-border-color: $button-border-color;
+$button-active-color: $black;
+$button-active-border-color: $black;
+$button-focus-color: $black;
+$button-focus-border-color: $black;
+$button-press-offset: ($shadow-width - $shadow-width-small);
+// $button-hover-color: $shadow-color;
+// $button-text-hover-background-color: $shadow-color;
