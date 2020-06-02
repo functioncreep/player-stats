@@ -34,6 +34,34 @@
     }
 }
 
+@keyframes hide-contents {
+    0% {
+        opacity: 100%;
+    }
+
+    50% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 0%;
+    }
+}
+
+@keyframes show-contents {
+    0% {
+        opacity: 0%;
+    }
+
+    45% {
+        opacity: 100%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
 .stats-panel {
     overflow: hidden;
 
@@ -43,56 +71,39 @@
     }
 
     .card-header-title,
-    .stats-date {
+    .stats-date,
+    .stat-block .title {
         word-break: unset;
     }
 
     &.open {
-        // width: 100%;
-        // height: 555px;
-        // max-height: 555px;
-        // min-height: 56px;
-        // min-width: 56px;
-
-        // transition:
-        //     height 0.2s,
-        //     width 0.2s 0.2s;
-
-        animation: open-panel 0.25s 0.25s;
+        animation: open-panel 0.25s;
         animation-fill-mode: backwards;
 
         .card-header-title,
         .stats-date,
         .stat-block {
-            opacity: 100%;
-            transition: opacity 0.2s steps(1);
+            animation: show-contents 0.25s steps(1);
+            animation-fill-mode: backwards;
         }
     }
 
     &.closed {
-        // width: 56px;
-        // height: 56px;
-        
-
-        // transition:
-        //     width 0.2s,
-        //     height 0.2s 0.2s;
-
-        animation: close-panel 0.25s 0.25s;
+        animation: close-panel 0.25s;
         animation-fill-mode: forwards;
 
         .card-header-title,
         .stats-date,
         .stat-block {
-            opacity: 0%;
-            transition: opacity 0.1s steps(1);
+            animation: hide-contents 0.25s steps(1);
+            animation-fill-mode: forwards;
         }
 
         .saving-spinner {
             top: -4px;
             right: unset;
             left: -4px;
-            opacity: 100%;
+            // opacity: 100%;
         }
     }
 }
