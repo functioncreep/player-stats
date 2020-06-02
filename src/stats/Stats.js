@@ -5,7 +5,7 @@ import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import rel from 'relational-pouch';
 import cloneObject from '../utilities/utilities';
-import Loading from '../common/Loading';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 PouchDB.plugin(find);
 PouchDB.plugin(rel);
@@ -235,6 +235,10 @@ class Stats extends React.Component {
         this.statsPanel.addEventListener('animationend', this.handlePanelAnimation);
     }
 
+    loadingSpinner(positioning) {
+        
+    }
+
     createStatsPanel() {
         const headerDate = this.state.stats.date;
         const statBars = Object.keys(this.state.stats.levels).map(category => {
@@ -256,22 +260,26 @@ class Stats extends React.Component {
             >
                 {/* { this.state.loading ? <Loading message="Loading Stats" /> : null } */}
                 <header className="card-header">
-                    <span
+                    <LoadingSpinner
+                        loading={this.state.loading}
+                        top={-4}
+                        left={-4}
+                    />
+                    {/* <span
                         style={{ opacity: this.state.loading ? '100%' : '0%' }}
                         className="icon loading-spinner"
                     >
                         <i className="fas fa-spinner fa-2x fa-pulse"></i>
-                    </span>
+                    </span> */}
                     <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
                     <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
                 </header>
                 <div className="card-content">
-                    <span
-                        style={{ opacity: this.state.saving ? '100%' : '0%' }}
-                        className="icon saving-spinner"
-                    >
-                        <i className="fas fa-spinner fa-2x fa-pulse"></i>
-                    </span>
+                    <LoadingSpinner
+                        loading={this.state.saving}
+                        top={54}
+                        right={0}
+                    />
                     <div className="container">
                         {statBars}
                     </div>

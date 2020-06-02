@@ -1,0 +1,10 @@
+@import '../sass/variables';
+
+.loading-spinner {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    padding: 0.75em;
+    color: #000;
+    opacity: 100%;
+}

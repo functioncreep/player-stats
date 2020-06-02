@@ -39,7 +39,6 @@ class StatBar extends React.Component {
     }
 
     setSlider(event) {
-        console.log('Setting slider!');
         this.slider.noUiSlider.set(event.target.value);
     }
 
