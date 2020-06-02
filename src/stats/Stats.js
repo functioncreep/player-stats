@@ -7,7 +7,6 @@ import rel from 'relational-pouch';
 import cloneObject from '../utilities/utilities';
 import Loading from '../common/Loading';
 
-// const PouchDB = require('pouchdb');
 PouchDB.plugin(find);
 PouchDB.plugin(rel);
 
@@ -42,14 +41,20 @@ const defaultStats = {
     lastUpdated: new Date().toISOString()
 }
 
+const PANEL_CLOSING = 'closing';
+const PANEL_CLOSED = 'closed';
+const PANEL_OPENING = 'opening';
+const PANEL_OPEN = 'open';
+
+
 class Stats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            panelClosed: false,
+            panelState: PANEL_CLOSED,
             loading: true,
             saving: false,
-            fresh: false,
+            fresh: true,
             allTags: [],
             stats: defaultStats,
         }
@@ -57,16 +62,29 @@ class Stats extends React.Component {
         this.handleLevelChange = this.handleLevelChange.bind(this);
         this.addStatsToDb = this.addStatsToDb.bind(this);
         this.insertStatsFromDb = this.insertStatsFromDb.bind(this);
-        this.toggleStatsPanelOpen = this.toggleStatsPanelOpen.bind(this);
+        this.createStatsPanel = this.createStatsPanel.bind(this);
+        this.closePanel = this.closePanel.bind(this);
+        this.createPanelRef = this.createPanelRef.bind(this);
+        this.handlePanelAnimation = this.handlePanelAnimation.bind(this);
+        this.loadStats = this.loadStats.bind(this);
     }
 
     componentDidMount() {
-        this.getLatestStats();
+        this.loadStats('latest').finally(() => {
+            this.setState({
+                loading: false,
+            });
+            this.openPanel();
+        })
+    }
+
+    componentWillUnmount() {
+        this.statsPanel.removeEventListener('animationend', this.handlePanelClose);
     }
 
     getLatestStats() {
         // Check if there's already an entry in the DB for today
-        db.rel.find('entry', this.state.stats.date).then(result => {
+        return db.rel.find('entry', this.state.stats.date).then(result => {
             if (result.entries.length > 0) {
                 this.insertStatsFromDb(result.entries[0]);
                 this.setState({
@@ -157,14 +175,67 @@ class Stats extends React.Component {
         }
     }
 
-    toggleStatsPanelOpen() {
-        this.setState({
-            panelClosed: this.state.panelClosed ? false : true,
-            saving: this.state.saving ? false : true
-        });
+    closePanel() {
+        if (this.state.panelState === PANEL_OPEN) {
+            this.setState({
+                panelState: PANEL_CLOSING,
+            });
+        }
     }
 
-    render() {
+    openPanel() {
+        if (this.state.panelState === PANEL_CLOSED) {
+            this.setState({
+                panelState: PANEL_OPENING,
+            });
+        }
+    }
+
+    loadStats(whichStats) {
+        switch (whichStats) {
+            case 'latest':
+                console.log('getting latest stats...');
+                return this.getLatestStats();
+            default:
+                console.log('loading stats...');
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 500);
+                });
+        }
+    }
+
+    handlePanelAnimation(event) {
+        switch (event.animationName) {
+            case 'close-panel':
+                this.setState({
+                    panelState: PANEL_CLOSED,
+                    loading: true
+                });
+                this.loadStats().finally(() => {
+                    this.setState({
+                        loading: false,
+                    });
+                    this.openPanel();
+                });
+                break;
+            case 'open-panel':
+                this.setState({
+                    panelState: PANEL_OPEN
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    createPanelRef(element) {
+        this.statsPanel = element;
+        this.statsPanel.addEventListener('animationend', this.handlePanelAnimation);
+    }
+
+    createStatsPanel() {
         const headerDate = this.state.stats.date;
         const statBars = Object.keys(this.state.stats.levels).map(category => {
             const componentKey = 'stat-' + category;
@@ -178,32 +249,45 @@ class Stats extends React.Component {
                 />
             )
         });
+        const statsPanel = (
+            <div
+                className={"card stats-panel " + this.state.panelState}
+                ref={this.createPanelRef}
+            >
+                {/* { this.state.loading ? <Loading message="Loading Stats" /> : null } */}
+                <header className="card-header">
+                    <span style={{opacity: this.state.loading ? '100%' : '0%'}} className="icon loading-spinner">
+                        <i className="fas fa-spinner fa-2x fa-pulse"></i>
+                    </span>
+                    <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
+                    <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
+                </header>
+                <div className="card-content">
+                    <span style={{opacity: this.state.saving ? '100%' : '0%'}} className="icon saving-spinner">
+                        <i className="fas fa-spinner fa-2x fa-pulse"></i>
+                    </span>
+                    <div className="container">
+                        { statBars }
+                    </div>
+                </div>
+            </div>
+        );
+        // statsPanel.addEventListener('animationend', this.loadStats, false);
+        return statsPanel;
+    }
 
+    render() {
         return(
             <div className="container">
 
                 <div className="columns">
                     <div className="column is-full">
-                        <button className="button" onClick={this.toggleStatsPanelOpen}>Close</button>
+                        <button className="button" onClick={this.closePanel}>Close</button>
                     </div>
                 </div>
                 <div className="columns">
                     <div className="column is-full">
-                        <div className={"card stats-panel " + (this.state.panelClosed ? "closed" : "open")}>
-                            { this.state.loading ? <Loading message="Loading Stats" /> : null }
-                            <header className="card-header">
-                                <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
-                                <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
-                            </header>
-                            <div className="card-content">
-                                <span style={{opacity: this.state.saving ? '100%' : '0%'}} className="icon saving-spinner">
-                                    <i className="fas fa-spinner fa-2x fa-pulse"></i>
-                                </span>
-                                <div className="container">
-                                    { statBars }
-                                </div>
-                            </div>
-                        </div>
+                        {this.createStatsPanel()}
                     </div>
                 </div>
             </div>

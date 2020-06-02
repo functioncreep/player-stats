@@ -16,6 +16,7 @@ class StatBar extends React.Component {
         noUiSlider.create(this.slider, {
             start: 5,
             step: 5,
+            animationDuration: 200,
             connect: 'lower',
             tooltips: false,
             padding: [5, 0],
