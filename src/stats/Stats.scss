@@ -1,5 +1,39 @@
 @import '../sass/variables';
 
+@keyframes close-panel {
+    0% {
+        width: 100%;
+        height: 555px;
+    }
+
+    50% {
+        width: 56px;
+        height: 555px;
+    }
+
+    100% {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+@keyframes open-panel {
+    0% {
+        width: 56px;
+        height: 56px;
+    }
+
+    50% {
+        width: 56px;
+        height: 555px;
+    }
+
+    100% {
+        width: 100%;
+        height: 555px;
+    }
+}
+
 .stats-panel {
     overflow: hidden;
 
@@ -14,15 +48,18 @@
     }
 
     &.open {
-        width: 100%;
-        height: 555px;
-        max-height: 555px;
-        min-height: 56px;
-        min-width: 56px;
+        // width: 100%;
+        // height: 555px;
+        // max-height: 555px;
+        // min-height: 56px;
+        // min-width: 56px;
 
-        transition:
-            height 0.2s,
-            width 0.2s 0.2s;
+        // transition:
+        //     height 0.2s,
+        //     width 0.2s 0.2s;
+
+        animation: open-panel 0.25s 0.25s;
+        animation-fill-mode: backwards;
 
         .card-header-title,
         .stats-date,
@@ -33,12 +70,16 @@
     }
 
     &.closed {
-        width: 56px;
-        height: 56px;
+        // width: 56px;
+        // height: 56px;
+        
 
-        transition:
-            width 0.2s,
-            height 0.2s 0.2s;
+        // transition:
+        //     width 0.2s,
+        //     height 0.2s 0.2s;
+
+        animation: close-panel 0.25s 0.25s;
+        animation-fill-mode: forwards;
 
         .card-header-title,
         .stats-date,
