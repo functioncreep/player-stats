@@ -8,6 +8,11 @@
         max-height: 56px;
     }
 
+    .card-header-title,
+    .stats-date {
+        word-break: unset;
+    }
+
     &.open {
         width: 100%;
         height: 555px;
@@ -16,8 +21,15 @@
         min-width: 56px;
 
         transition:
-            height 0.2s steps(6),
-            width 0.2s 0.25s steps(6);
+            height 0.2s,
+            width 0.2s 0.2s;
+
+        .card-header-title,
+        .stats-date,
+        .stat-block {
+            opacity: 100%;
+            transition: opacity 0.2s steps(1);
+        }
     }
 
     &.closed {
@@ -25,8 +37,22 @@
         height: 56px;
 
         transition:
-            width 0.2s steps(6),
-            height 0.2s 0.2s steps(6);
+            width 0.2s,
+            height 0.2s 0.2s;
+
+        .card-header-title,
+        .stats-date,
+        .stat-block {
+            opacity: 0%;
+            transition: opacity 0.1s steps(1);
+        }
+
+        .saving-spinner {
+            top: -4px;
+            right: unset;
+            left: -4px;
+            opacity: 100%;
+        }
     }
 }
 
@@ -42,4 +68,5 @@
     height: 56px;
     padding: 0.75em;
     color: #000;
+    opacity: 100%;
 }

@@ -159,7 +159,8 @@ class Stats extends React.Component {
 
     toggleStatsPanelOpen() {
         this.setState({
-            panelClosed: this.state.panelClosed ? false : true
+            panelClosed: this.state.panelClosed ? false : true,
+            saving: this.state.saving ? false : true
         });
     }
 
@@ -188,14 +189,14 @@ class Stats extends React.Component {
                 </div>
                 <div className="columns">
                     <div className="column is-full">
-                        <div className={"card stats-panel" + (this.state.panelClosed ? " closed" : " open")}>
+                        <div className={"card stats-panel " + (this.state.panelClosed ? "closed" : "open")}>
                             { this.state.loading ? <Loading message="Loading Stats" /> : null }
                             <header className="card-header">
                                 <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
                                 <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
                             </header>
                             <div className="card-content">
-                                <span style={{display: this.state.saving ? 'block' : 'none'}} className="icon saving-spinner">
+                                <span style={{opacity: this.state.saving ? '100%' : '0%'}} className="icon saving-spinner">
                                     <i className="fas fa-spinner fa-2x fa-pulse"></i>
                                 </span>
                                 <div className="container">
