@@ -16,14 +16,14 @@ db.setSchema([
         singular: 'entry',
         plural: 'entries',
         relations: {
-            tags: {hasMany: 'tag'}
+            tags: { hasMany: 'tag' }
         }
     },
     {
         singular: 'tag',
         plural: 'tags',
         relations: {
-            entries: {hasMany: 'entry'}
+            entries: { hasMany: 'entry' }
         }
     }
 ]);
@@ -129,7 +129,7 @@ class Stats extends React.Component {
     }
 
     handleLevelChange(updatedStat) {
-        const newState = cloneObject(this.state); 
+        const newState = cloneObject(this.state);
 
         if (newState.stats.levels[updatedStat.category] !== updatedStat.level) {
             newState.stats.levels[updatedStat.category] = updatedStat.level;
@@ -256,28 +256,33 @@ class Stats extends React.Component {
             >
                 {/* { this.state.loading ? <Loading message="Loading Stats" /> : null } */}
                 <header className="card-header">
-                    <span style={{opacity: this.state.loading ? '100%' : '0%'}} className="icon loading-spinner">
+                    <span
+                        style={{ opacity: this.state.loading ? '100%' : '0%' }}
+                        className="icon loading-spinner"
+                    >
                         <i className="fas fa-spinner fa-2x fa-pulse"></i>
                     </span>
                     <p className="card-header-title subtitle is-marginless has-text-weight-normal">Stats</p>
                     <p className="subtitle is-5 stats-date has-text-weight-normal">{headerDate}</p>
                 </header>
                 <div className="card-content">
-                    <span style={{opacity: this.state.saving ? '100%' : '0%'}} className="icon saving-spinner">
+                    <span
+                        style={{ opacity: this.state.saving ? '100%' : '0%' }}
+                        className="icon saving-spinner"
+                    >
                         <i className="fas fa-spinner fa-2x fa-pulse"></i>
                     </span>
                     <div className="container">
-                        { statBars }
+                        {statBars}
                     </div>
                 </div>
             </div>
         );
-        // statsPanel.addEventListener('animationend', this.loadStats, false);
         return statsPanel;
     }
 
     render() {
-        return(
+        return (
             <div className="container">
 
                 <div className="columns">
